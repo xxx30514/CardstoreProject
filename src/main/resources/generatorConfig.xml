@@ -45,7 +45,7 @@
 		</javaClientGenerator>
 		
         <!-- 要生成的資料表 -->
-		<table tableName="t_emp2" domainObjectName="Emp2"></table>
+		<table tableName="t_product" domainObjectName="Product"></table>
 
 	</context>
 </generatorConfiguration>

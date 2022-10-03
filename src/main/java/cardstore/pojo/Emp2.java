@@ -10,8 +10,19 @@ public class Emp2 {
     private String empGender;
 
     private Integer deptId;
+    
+    public Emp2() {
+	}
 
-    public Integer getEmpId() {
+	public Emp2(Integer empId, String empName, Integer empAge, String empGender, Integer deptId) {
+		this.empId = empId;
+		this.empName = empName;
+		this.empAge = empAge;
+		this.empGender = empGender;
+		this.deptId = deptId;
+	}
+
+	public Integer getEmpId() {
         return empId;
     }
 
