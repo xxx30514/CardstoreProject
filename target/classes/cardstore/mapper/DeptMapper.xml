@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cardstore.mapper.DeptMapper">
+	<!-- Dept getEmpAndDeptByStepTwo(@Param("deptId") Integer detpId); -->
+	<select id="getEmpAndDeptByStepTwo" resultType="Dept">
+		select * from
+		t_dept where dept_id = #{deptId}
+	</select>
+	<resultMap type="Dept" id="DeptAndEmpResultMap">
+		<id column="dept_id" property="deptId" />
+		<result column="dept_name" property="deptName" />
+		<!-- ofType 設置集合中儲存的資料類型 -->
+		<collection property="emps" ofType="Emp">
+			<id column="emp_id" property="empId" />
+			<result column="emp_name" property="empName" />
+			<result column="emp_age" property="empAge" />
+			<result column="emp_gender" property="empGender" />
+		</collection>
+	</resultMap>
+	<!-- Dept getDeptAndEmpByDeptId(@Param("deptId") Integer detpId); -->
+	<select id="getDeptAndEmpByDeptId"
+		resultMap="DeptAndEmpResultMap">
+		select *
+		from t_dept left join t_emp
+		on t_dept.dept_id = t_emp.dept_id
+		where t_dept.dept_id = #{deptId}
+	</select>
+		
+		<resultMap type="Dept" id="deptAndEmpResultMapByStep">
+			<id column="dept_id" property="deptId"/>
+			<result column="dept_name" property="deptName"/>
+			<collection property="emps" select="cardstore.mapper.EmpMapper.getDeptAndEmpByStepTwo" column="dept_id">
+			
+			</collection>
+		</resultMap>
+
+	<!-- Dept getDeptAndEmpByStepOne(@Param("deptId") Integer detpId); -->
+	<select id="getDeptAndEmpByStepOne" resultMap="deptAndEmpResultMapByStep">
+		select * from t_dept where dept_id = #{deptId}
+	</select>
+</mapper>

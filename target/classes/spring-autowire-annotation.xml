@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-2.5.xsd  http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	<!-- 掃描組件  base-package="cardstore" cardstore下的類都會掃描-->
+	<context:component-scan base-package="cardstore">
+	<!--context:exclude-filter:排除掃描
+		以註解來排除掃描某種類  type="annotation" 
+		expression="org.springframework.stereotype.Controller" 註解名
+		排除掃描@Controller
+		以類名排除掃描某類 type="assignable"
+		expression="cardstore.controller.TestController" 全類名
+		context:include-filter:包含掃描 
+		需要在context:component-scan標籤內加上use-default-filters="false"屬性才會生效 不然預設情況下是掃描該package下的所有類
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		排除與包含僅能存在一種 排除比較常使用
+	-->	
+	</context:component-scan>
+	
+
+</beans>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!--配置文件標籤要照指定順序配置  -->
+	<!-- 引入properties文件 利用${key}存取value 改由spring管理 -->
+<!-- 	<properties resource="jdbc.properties" /> -->
+	<!-- typeAliases 為具體類型設置別名 在mybatis的mapper中使用 表示具體類型 
+		type=具體類 alias=別名
+		<typeAlias type="cardstore.pojo.User"></typeAlias> 預設別名為類名即User(不分大小寫)
+		<package name="cardstore.pojo"/>指定pakage下的類都會有預設別名
+	-->
+	
+	<settings>
+	<!-- 將_映射為駝峰 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	<!-- 開啟延遲載入 -->	
+		<setting name="lazyLoadingEnabled" value="true"/>
+	<!-- 按需載入 -->
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+	
+	<!-- <typeAliases>
+		<package name="cardstore.pojo"/>
+	</typeAliases>
+	 -->
+	<!--配置資料庫連接環境 
+		default屬性:設置預設使用的環境id
+		environment:設置具體資料庫連接環境 只有id一個屬性(唯一) 
+	-->
+	<plugins>
+		<plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+	</plugins>
+<!-- 	<environments default="development"> -->
+<!-- 		<environment id="development"> -->
+		<!-- transactionManager sql交易管理器 type:管理方式JDBC/MANAGED
+		JDBC:使用JDBC原生sql交易管理方式
+		MANAGED:被管理,ex.spring(IOC)
+		 -->
+<!-- 			<transactionManager type="JDBC" /> -->
+			<!-- 設置資料源 
+			type:POOLED/UNPOLLED/JNDI
+			POOLED:資料庫連接池
+			UNPOLLED:不使用連接池
+			JNDI:使用上下文中的資料源
+			-->
+	<!--  		<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	-->
+	<!-- 	<environment id="test">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.cj.jdbc.Driver" />
+				<property name="url" value="jdbc:mysql://localhost:3306/cardstoredb?serverTimezone=UTC" />
+				<property name="username" value="pm" />
+				<property name="password" value="pm" />
+			</dataSource>
+		</environment>
+	</environments> -->
+	<!-- 引入mybatis映射文件(存放sql語句)  
+		package 1.mapper介面與映射文件所在的package需一致(cardstore.mapper)
+				2.mapper介面名稱與映射文件需一致(UserMapper)
+		<mapper resource="mappers/UserMapper.xml" />
+	-->
+<!-- 	<mappers> -->
+<!-- 		<package name="cardstore.mapper"/> -->
+<!-- 	</mappers> -->
+</configuration>

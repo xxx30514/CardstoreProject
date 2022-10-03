@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlnxmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
+<!-- 磁碟快取位置 -->
+	<diskStore path="java.io.tmpdir"/>
+<!-- 預設快取 -->
+	<defaultCache
+		maxElementsInMemory="10000"
+		maxElementsOnDisk="10000000"
+		eternal="false"
+		timeToIdleSeconds="120"
+		timeToLiveSeconds="120"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</defaultCache>
+<!-- 測試 a-->
+<cache
+name="cachea"
+eternal="false"
+timeToIdleSeconds="1200"
+timeToLiveSeconds="1200"
+maxEntriesLocalHeap="10000"
+maxEntriesLocalDisk="10000000"
+diskExpiryThreadIntervalSeconds="120"
+overflowToDisk="false"
+memoryStoreEvictionPolicy="LRU">
+</cache>
+</ehcache>

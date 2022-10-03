@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cardstore.mapper.UserMapper">
+
+	<!-- 欄位跟屬性名不同(有在配置文件設定自動駝峰) 要另外設定 目前查出來都是null <resultMap type="Emp" id="empResultMap"> 
+		<id column="emp_id" property="empId"/> <result column="emp_name" property="empName"/> 
+		<result column="emp_age" property="empAge"/> <result column="emp_gender" 
+		property="empGender"/> </resultMap> <select id="getEmpByEmpId" resultMap="empResultMap"> 
+		select * from t_emp where emp_id = #{empId} </select> -->
+
+	<!-- updateUser(); -->
+	<update id="updateUser">
+		update t_user set u_name='主管理員',u_nickname='老闆' where u_id = 1
+	</update>
+	<!-- deleteUser(); -->
+	<delete id="deleteUser">
+		delete from t_user where u_id = 1
+	</delete>
+	<!-- User getUserById(@Param("id")int id); -->
+	<!-- resultType 設置結果類型 將查詢結果轉為什麼樣的java類 實體 double String Map... resultMap 
+		處理映射關係 多對一or一對多 -->
+	<select id="getUserById" resultType="cardstore.pojo.User">
+		select * from t_user where u_id = #{id}
+	</select>
+	<!-- getAllUser() -->
+	<select id="getAllUser" resultType="User">
+		select * from t_user
+	</select>
+	<!-- User getUserByAccount(String account); select * from t_user where u_account 
+		= #{account} select * from t_user where u_account = '${account}'($字串拼接'') -->
+	<select id="getUserByAccount" resultType="User">
+		select * from t_user where u_account = #{account}
+	</select>
+	<!-- User checkLogin(String account,String password); 多個占位符? #{param1} 、#{param2} 
+		map(key,value) 版本不同#{account}、#{password}也可 -->
+	<select id="checkLogin" resultType="User">
+		select * from t_user where u_account = #{param1} and u_password = #{param2}
+	</select>
+	<!-- User checkLoginByMap(Map<String, Object> map); -->
+	<select id="checkLoginByMap" resultType="User">
+		select * from t_user where u_account = #{account} and u_password =
+		#{password}
+	</select>
+	<!-- void insertUser(User user); -->
+	<insert id="insertUser">
+		insert into t_user
+		values(null,#{u_account},#{u_password},#{u_name},#{u_nickname},#{u_email},#{u_date},#{u_status})
+	</insert>
+	<!-- User checkLoginByParam(@Param("account") String account,@Param("password") 
+		String password); @Param("account")以account為鍵 -->
+	<select id="checkLoginByParam" resultType="User">
+		select * from t_user where u_account = #{account} and u_password =
+		#{password}
+	</select>
+	<!-- void deleteUsers(@Param("ids")String ids); ids:1,2 -->
+	<delete id="deleteUsers">
+		delete from t_user where u_id in(${ids})
+	</delete>
+</mapper>

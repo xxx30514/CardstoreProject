@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>錯誤頁面</title>
+</head>
+<body>
+	<h1>error.html</h1>
+	<h1>碰到異常</h1>
+	<p th:text="${ex}"></p>
+	<p th:text="${exception}"></p>
+	<p th:text="${session.testSessionScope}"></p>
+	<p th:text="${application.testApplicationScope}"></p>
+	
+</body>
+</html>

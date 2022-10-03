@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cardstore.mapper.SelectMapper">
+	<!--User getUserById(@Param("id")Integer id); -->
+	<select id="getUserById" resultType="User">
+		select * from t_user where u_id = #{id}
+	</select>
+	<!-- List<User> getAllUser(); -->
+	<select id="getAllUser" resultType="User">
+		select * from t_user
+	</select>
+	<!-- Integer getUserCount(); resultType= "java.lang.Integer" "int" "INT" 
+		"integer" "Integer" 皆可 mybatis有預設別名 上述都是Integer的別名 int的別名 _int, _integer -->
+	<select id="getUserCount" resultType="java.lang.Integer">
+		select count(*) from t_user
+	</select>
+	<!-- Map<String, Object> getUserByIdToMap(@Param("id")Integer id); -->
+	<select id="getUserByIdToMap" resultType="map">
+		select * from t_user where u_id = #{id}
+	</select>
+	<!-- Map<String, Object> getAllUserToMap(); -->
+	<select id="getAllUserToMap" resultType="map">
+		select * from t_user
+	</select>
+	<!-- List<User> SearchUser(@Param("keyword")String keyword); -->
+	<!-- 1.select * from t_user where u_name like '%${keyword}%' 2.select * 
+		from t_user where u_name like concat('%',#{keyword},'%') 3.*** select * from 
+		t_user where u_name like "%"#{keyword}"%" -->
+	<select id="SearchUser" resultType="User">
+		select * from t_user where u_name like "%"#{keyword}"%"
+	</select>
+	<!-- List<User> getUserList(@Param("tableName")String tableName); #{}會幫你加上'' 
+		表名不能加上''要用${} -->
+	<select id="getUserList" resultType="User">
+		select * from ${tableName}
+	</select>
+	<!-- void insertUser(User user); useGeneratedKeys="true" 表示使用自增主鍵 keyProperty="u_id" 
+		自增主鍵賦值 實體類的屬性User類的 u_id(PK) -->
+	<insert id="insertUser" useGeneratedKeys="true"
+		keyProperty="u_id">
+		insert into t_user
+		values(null,#{u_account},#{u_password},#{u_name},#{u_nickname},#{u_email},#{u_date},#{u_status})
+	</insert>
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cardstore.mapper.EmpMapper">
+	<!-- List<Emp> getAllEmp(); -->
+	<select id="getAllEmp" resultType="Emp" >
+		 select * from t_emp 
+	</select>
+	<!-- Emp getEmpByEmpId(@Param("empId") Integer empId); -->
+	<select id="getEmpByEmpIdOld" resultType="Emp">
+	<!-- 欄位名跟屬性名不同時 如何處理映射關係
+		1.給欄位和屬性名一致的別名
+		2.在核心配置文件mybatis-config.xml設置全域設定settings將_映射為駝峰
+		emp_id:empId	 emp_name:empName 欄位:屬性名 還是要遵守 _ 駝峰
+		3.resultMap 自定映射關係
+	 -->
+		select * from t_emp where emp_id = #{empId}
+	</select>
+	<!-- resultMap  type=映射的實體類 id設置主鍵 result設置其他欄位 
+		column欄位名:sql查出來的欄位名  property屬性名:實體類類型中的屬性名
+	-->
+	<resultMap type="Emp" id="empResultMap">
+		<id column="emp_id" property="empId"/>
+		<result column="emp_name" property="empName"/>
+		<result column="emp_age" property="empAge"/>
+		<result column="emp_gender" property="empGender"/>
+	</resultMap>
+	<select id="getEmpByEmpId" resultMap="empResultMap">
+		select * from t_emp where emp_id = #{empId}
+	</select>
+	<!-- Emp getEmpAndDeptByEmpId(@Param("empId") Integer empId);
+		左外連接 =>沒部門的員工也會查出來 
+		多對一映射的處理方式
+		1.級聯 Emp類裡面有Dept類要處理映射關係
+		2.association 關聯查詢 專門處理多對一或一對一映射關係(處理實體類的屬性)
+		3.分步查詢
+		一對多映射的處理方式
+		1.collection (處理集合類型屬性) ofType 集合中的類型
+	 -->
+	 <resultMap type="Emp" id="EmpAndDeptResultMapOne">
+	 	<id column="emp_id" property="empId"/>
+		<result column="emp_name" property="empName"/>
+		<result column="emp_age" property="empAge"/>
+		<result column="emp_gender" property="empGender"/>
+		<result column="dept_id" property="dept.deptId"/>
+		<result column="dept_name" property="dept.deptName"/>
+	 </resultMap>
+	  <resultMap type="Emp" id="EmpAndDeptResultMapTwo">
+	 	<id column="emp_id" property="empId"/>
+		<result column="emp_name" property="empName"/>
+		<result column="emp_age" property="empAge"/>
+		<result column="emp_gender" property="empGender"/>
+		<!-- property要處理的實體類(Emp.java)裡面的屬性名 dept屬性 
+			javaType實體類名稱cardstore.pojo.Dept 要處理的屬性類型
+			由於mybatis-config有設置過
+			<typeAliases>
+				<package name="cardstore.pojo"/>
+			</typeAliases>
+			可使用別名Dept
+		-->
+		<association property="dept" javaType="Dept">
+			<id column="dept_id" property="deptId"/>
+			<result column="dept_name" property="deptName"/>
+		</association>
+	 </resultMap>
+	<select id="getEmpAndDeptByEmpId" resultMap="EmpAndDeptResultMapTwo">
+		select t_emp.*,t_dept.* 
+		from t_emp 
+		left join t_dept 
+		on t_emp.dept_id = t_dept.dept_id 
+		where t_emp.emp_id = #{empId}
+	</select>
+	
+	<!-- Emp getEmpAndDeptByStep(@Param("empId") Integer empId);
+		association property 設置需要處理映射關係的屬性名
+		select 設置分步查詢的sql的唯一標識(id)
+		column 將查出的某個字段作為分步查詢的條件
+		fetchType: 開啟了延遲載入的環境中 透過該屬性設置當前分步查詢是否使用延遲載入
+					eager(立即載入) lazy(延遲載入)
+		延遲載入:節省資源 ex僅查詢員工姓名時 只會執行第一句sql不會去查詢部門			
+	 -->
+	<resultMap type="Emp" id="EmpAndDeptByStepResultMap">
+	 	<id column="emp_id" property="empId"/>
+		<result column="emp_name" property="empName"/>
+		<result column="emp_age" property="empAge"/>
+		<result column="emp_gender" property="empGender"/>
+		<association property="dept"  fetchType="lazy"
+					 select="cardstore.mapper.DeptMapper.getEmpAndDeptByStepTwo" 
+					 column="dept_id">
+		</association>
+	 </resultMap>
+	<select id="getEmpAndDeptByStep" resultMap="EmpAndDeptByStepResultMap">
+		select * from t_emp where emp_id = #{empId}
+	</select>
+	<!-- List<Emp> getDeptAndEmpByStepTwo(@Param("deptId")Integer deptId); -->
+	<select id="getDeptAndEmpByStepTwo" resultType="Emp">
+		select * from t_emp where dept_id = #{deptId}
+	</select>
+</mapper>

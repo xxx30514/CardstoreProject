@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util-2.5.xsd  http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+    <!-- 介面類型無法實例化 不能配置 -->
+	<bean id="emp1" class="cardstore.pojo.Emp">
+	<!-- 依賴注入之setter注入  property name="屬性名" value:"字面值" 
+	ref:"bean id" ex.ref="emp1"=>cardstore.pojo.Emp=> Emp.class
+	-->
+		<property name="empId" value="1001"></property>
+		<property name="empName">
+			<value><![CDATA[<@小王>]]></value>
+		</property>
+		<property name="empAge" value="25"></property>
+		<property name="empGender" value="男"></property>
+		<!-- 特殊值賦值 
+		1.賦值為null<property name="empGender"><null/></property>
+		2.處理<>等特殊符號:
+		2-1跳脫字元<:&lt; >:&gt;
+		2-2.CDATA節 <![CDATA[]]> 僅能在標籤內表示 <value><![CDATA[<小王>]]></value>
+		-->
+		
+	</bean>
+	<!-- 有參建構子 Emp(Integer empId, String empName, Integer empAge, String empGender) 
+		要按照順序 或是要加上屬性名
+	-->
+	<bean id="emp2" class="cardstore.pojo.Emp">
+		<constructor-arg value="1002"></constructor-arg>
+		<constructor-arg value="小李"></constructor-arg>
+		<constructor-arg value="24" name="empAge"></constructor-arg>
+		<constructor-arg value="男"></constructor-arg>
+	</bean>
+	<!-- calss屬性賦值 3-1:使用外部bean 最常使用-->
+	<bean id="emp3" class="cardstore.pojo.Emp">
+		<property name="empId" value="1003"></property>
+		<property name="empName" value="王武"></property>
+		<property name="empAge" value="25"></property>
+		<property name="empGender" value="男"></property>
+		<property name="dept" ref="dept"></property>
+		<!-- 為數組賦值 String[] Integer[] -->
+		<property name="hobby">
+			<array>
+			<!-- 若要為類類型的數組賦值 
+			<ref bean="要引用的beanID"/>
+			-->
+				<value>吃飯</value>
+				<value>睡覺</value>
+				<value>打牌</value>
+			</array>
+		</property>
+	</bean>
+	<bean id="dept" class="cardstore.pojo.Dept">
+		<property name="deptId" value="1"></property>
+		<property name="deptName" value="營業部"></property>
+		<!-- 集合賦值-list 
+		<property name="emps">
+			<list>
+				<ref bean="emp1"/>
+				<ref bean="emp2"/>
+				<ref bean="emp4"/>			
+			</list>
+		</property>
+		-->
+		<property name="emps" ref="empList"></property>
+	</bean>
+	<!-- util約束 配置集合類型 
+	<property name="emps" ref="empList"></property>
+	<util:list id="empList">
+		<ref bean="emp1"/>
+		<ref bean="emp2"/>
+		<ref bean="emp4"/>
+	</util:list>
+	-->
+	<util:list id="empList">
+		<ref bean="emp1"/>
+		<ref bean="emp2"/>
+		<ref bean="emp4"/>
+	</util:list>
+	
+	<util:map id="teacherMap">
+		<entry key="1001" value-ref="teacher1"></entry>
+		<entry key="1002" value-ref="teacher2"></entry>
+	</util:map>
+	
+	<!-- calss屬性賦值 3-2:級聯方式賦值:提前為class屬性賦值或是實例化 較少使用 -->
+	<bean id="emp4" class="cardstore.pojo.Emp">
+		<property name="empId" value="1003"></property>
+		<property name="empName" value="王武"></property>
+		<property name="empAge" value="25"></property>
+		<property name="empGender" value="男"></property>
+		<!-- map集合賦值 
+		<entry key="" value=""></entry> key與value為字面值時使用
+		<entry key-ref="" value-ref=""></entry> key與value為類類型時使用
+		Map<String, Teacher> tid為key(String)  value-ref="teacher1"(Teacher類)
+		<property name="teacherMap">
+			<map>
+				<entry key="1001" value-ref="teacher1"></entry>
+				<entry key="1002" value-ref="teacher2"></entry>
+			
+			</map>
+		</property>
+		-->
+		<property name="teacherMap" ref="teacherMap"></property>
+		<!-- 內部bean 不能透過IOC直接獲取-->
+		<property name="dept">
+			<bean id="deptInner" class="cardstore.pojo.Dept">
+				<property name="deptId" value="2"></property>
+				<property name="deptName" value="營業"></property>
+			</bean>
+		</property>
+		<!--  級聯方式
+		<property name="dept" ref="dept">
+		<property name="dept.deptId" value="2"></property>
+		<property name="dept.deptName" value="銷售部"></property>	
+		-->
+	</bean>
+	<bean id="teacher1" class="cardstore.pojo.Teacher">
+		<property name="tid" value="1001"></property>
+		<property name="tname" value="王老師"></property>
+	</bean>
+	<bean id="teacher2" class="cardstore.pojo.Teacher">
+		<property name="tid" value="1002"></property>
+		<property name="tname" value="林老師"></property>
+	</bean>
+	<!-- p命名空間 較少使用 -->
+	<bean id="emp5" class="cardstore.pojo.Emp" p:empId="1005" p:empName="大名" p:teacherMap-ref="teacherMap" >
+	
+	</bean>
+</beans>

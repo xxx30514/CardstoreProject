@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>首頁</title>
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+ <nav class="navbar navbar-expand-lg navbar-light bg-secondary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">Navbar</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+	<div id="app">
+<!-- 		<a th:href="@{/emp}">查詢所有員工</a> -->
+		<a th:href="@{/emp/page/1}">分頁功能實現</a>
+		<h1>{{ message }}</h1>
+		<input type="button" value="測試SpringMVC處理ajax" @click="testAjax()"><br>
+		<input type="button" value="使用@RequestBody處理json格式的請求參數" @click="testRequestBody()"><br> 
+		<a th:href="@{/test/ResponseBody}">測試@ResponseBody註解響應瀏覽器資料</a><br>
+		<input type="button" value="使用@ResponseBody響應json格式的資料" @click="testResponseBody()"><br>
+		<a th:href="@{/test/download}">下載圖片</a><br>
+		<form th:action="@{/test/upload}" method="post" enctype="multipart/form-data">
+		 個人圖片:<input type="file" name="photo"><br>
+		 <input type="submit" value="上傳">
+		</form>
+	</div>
+	<h1>index.html</h1>
+	<a th:href="@{/hello}">Spring@RequestMapping標示測試</a>
+	<br>
+	<a th:href="@{/abc}">Spring@RequestMapping value屬性測試</a>
+	<br>
+	<form th:action="@{/hellopost}" method="post">
+		<input type="submit" value="測試@RequestMapping method屬性測試">
+	</form>
+	<a th:href="@{/helloparams?username=pm}">Spring@RequestMappingparams屬性</a>
+	<br>
+	<a th:href="@{/helloparams(username='pm')}">Spring@RequestMappingparams屬性2</a>
+	<br>
+	<a th:href="@{/aaa/test/ant}">Spring@RequestMapping ant風格路徑</a>
+	<br>
+	<a th:href="@{/test/rest/admin/1}">Spring@RequestMappingvalue屬性中的占位符</a>
+	<br>
+	<hr>
+	<h1>servletAPI</h1>
+	<form th:action="@{/param/servletAPI}" method="post">
+		帳號:<input type="text" name="username"><br> 密碼:<input
+			type="password" name="password"><br> <input
+			type="submit" value="登入"><br>
+	</form>
+	<hr>
+	<h1>形式參數</h1>
+	<form th:action="@{/param}" method="post">
+		帳號:<input type="text" name="username"><br> 密碼:<input
+			type="password" name="password"><br> <input
+			type="submit" value="登入"><br>
+	</form>
+	<h1>@RequestParam</h1>
+	<form th:action="@{/param/requestParam}" method="get">
+		帳號:<input type="text" name="username"><br> 密碼:<input
+			type="password" name="password"><br> <input
+			type="submit" value="登入"><br>
+	</form>
+	<h1>POJO</h1>
+	<form th:action="@{/param/pojo}" method="post">
+		帳號:<input type="text" name="u_account"><br> 密碼:<input
+			type="password" name="u_password"><br> <input
+			type="submit" value="登入"><br>
+	</form>
+	<h1>RequestScopeTest</h1>
+	<a th:href="@{/test/mav}">測試model_view</a>
+	<br>
+	<a th:href="@{/test/model}">測試model</a>
+	<br>
+	<a th:href="@{/test/modelMap}">測試modelMap</a>
+	<br>
+	<a th:href="@{/test/map}">測試Map</a>
+	<br>
+	<a th:href="@{/test/session}">測試Session域請求</a>
+	<br>
+	<a th:href="@{/test/application}">測試application域請求</a>
+	<br>
+	<hr>
+	<a th:href="@{/test/view/thymeleaf}">測試SpringMVC的ThymeleafView視圖</a>
+	<br>
+	<a th:href="@{/test/view/forward}">測試SpringMVC的InternalResourceView視圖</a>
+	<br>
+	<a th:href="@{/test/view/redirect}">測試SpringMVC的RedirectView視圖</a>
+	<br>
+	<h1>REST</h1>
+	<a th:href="@{/user}">查詢所有使用者</a>
+	<br>
+	<a th:href="@{/user/1}">查詢ID為1的使用者</a>
+	<br>
+	<form th:action="@{/user}" method="post">
+		<input type="submit" value="新增使用者"><br>
+	</form>
+	<form th:action="@{/user}" method="post">
+		<input type="hidden" name="_method" value="put"> <input
+			type="submit" value="修改使用者"><br>
+	</form>
+	<form th:action="@{/user/1}" method="post">
+		<input type="hidden" name="_method" value="delete"> <input
+			type="submit" value="刪除使用者"><br>
+	</form>
+	<a th:href="@{/employee}">查詢所有員工測試</a>
+</body>
+<script>
+/**
+ *  
+ methods:{
+ testAjax(){
+ 	axios({
+	  url:"",//請求路徑
+	  method:"",//請求方式
+	  params:{},
+	  //請求參數:name=value&name=value的方式傳輸 
+	  不管傳輸方式為get或post請求參數都會被拼接到url後,可透過request.getParameter()獲取
+	  data:{}//請求參數:json格式發送的請求參數,請求參數會被保存到請求報文的請求體(HTTP報文主體)傳輸到伺服器 
+	  (get方式無請求體) ,不可透過request.getParameter()獲取
+  }).then(function (response) {//成功時執行的回調函數
+      console.log(response);
+  }).catch(function (error) {//有異常時執行的回調函數
+      console.log(error);
+  });
+ }
+ }).mount('#app')
+ */
+    const { createApp } = Vue  
+    createApp({
+      data() {
+        return {
+          message: 'Hello Vue!'
+        }
+      },
+      methods:{
+    	  testAjax(){	
+    		 		axios.post(
+    		 			"/CardstoreSSM/test/ajax?id=1001",
+    		 			{username:"admin",password:"123456"}		
+    		 		).then(function (response) {//成功時執行的回調函數
+    		 		      console.log(response);
+    		 		  });
+    	  },
+    	  testRequestBody(){
+    		  	axios.post(
+    		  		 "/CardstoreSSM/test/RequestBody/json",
+    		  		{username:"admin",password:"123456",age:23,gender:"男"}
+    		   ).then(function (response) {//成功時執行的回調函數
+		 		      console.log(response);
+		 		  });
+    	  },
+    	  testResponseBody(){
+    		  axios.post(
+     		  		 "/CardstoreSSM/test/ResponseBody/json"
+     		   ).then(function (response) {//成功時執行的回調函數
+ 		 		      console.log(response);
+ 		 		  });
+    	  }
+      }
+    }).mount('#app')
+        
+    </script>
+</html>
