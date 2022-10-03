@@ -11,7 +11,7 @@
 	<resultMap type="Dept" id="DeptAndEmpResultMap">
 		<id column="dept_id" property="deptId" />
 		<result column="dept_name" property="deptName" />
-		<!-- ofType 設置集合中儲存的資料類型 -->
+		<!--多對一 ofType 設置集合中儲存的資料類型  -->
 		<collection property="emps" ofType="Emp">
 			<id column="emp_id" property="empId" />
 			<result column="emp_name" property="empName" />
